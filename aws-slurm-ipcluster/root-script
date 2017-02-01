@@ -4,7 +4,9 @@
 
 EC2U=ec2-user
 SCRIPT=ec2-user-script
-if [ ! -e /home/$EC2U/$SCRIPT ]; then
-    curl -L https://github.com/psiori/AWS-cluster-config/raw/master/aws-slurm-ipcluster/$SCRIPT > /home/$EC2U/$SCRIPT
-    su -l $EC2U -c /home/$EC2U/$SCRIPT  
+SLOC=/home/$EC2U/$SCRIPT
+if [ ! -e "$SLOC" ]; then
+    curl -L https://github.com/psiori/AWS-cluster-config/raw/master/aws-slurm-ipcluster/$SCRIPT > "$SLOC"
+    chmod a+x "$SLOC"
+    su -l $EC2U -c "$SLOC"  
 fi
