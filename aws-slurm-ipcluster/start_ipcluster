@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+function check_zero {
+    if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+        echo 0
+    else
+        echo $1
+    fi
+}
+
+function get_pending {
+    pend=$(/opt/slurm/bin/squeue -r -h -o '%t %D' | awk '$1 == "PD" { total = total + 1} END {print total}')
+    echo $( check_zero "$pend" )
+}
+
+function get_running {
+    runn=$(/opt/slurm/bin/squeue -r -h -o '%t %D' | awk '$1 == "R" { total = total + 1} END {print total}')
+    echo $( check_zero "$runn" )
+}
+
+
+
+USAGE="Start ipcluster with N workers (N>=1).
+
+Usage: $(basename $0) N"
+
+# check that the only argument we get is an integer
+if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
+    echo "$USAGE"
+    exit 1
+fi
+
+echo "Starting workers..."
+# start the controller and the first worker
+ipcluster start -n 1 --daemonize
+# now start all other needed workers in a loop
+for worker in $(seq 1 $(( $1 - 1 )) ); do
+    ipcluster engines --n=1 --daemonize
+done
+
+sleep 5
+# now monitor slurm queue and give feedback
+pending=$(get_pending)
+running=$(get_running)
+
+while [ "$pending" -ne 0 ]; do
+    # check that pending+running == N, otherwise something is broken...
+    if [ $(( $pending + $running )) -ne $1 ]; then
+        echo "Unexpected error. Exit!"
+        exit 1
+    fi
+    # clean the screen
+    echo "Waiting for $pending workers to start (AWS autoscaling)..."
+    sleep 5
+    pending=$(get_pending)
+    running=$(get_running)
+done
+echo "All workers have been started!"
