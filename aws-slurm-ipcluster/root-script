@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 # Download ec2-user script and run it as ec2-user
-curl 
+# Only download and run if the script did not exsist already
+
+EC2U=ec2-user
+SCRIPT=ec2-user-script
+if [ ! -e /home/$EC2U/$SCRIPT ]; then
+    curl -L https://github.com/psiori/AWS-cluster-config/raw/master/aws-slurm-ipcluster/$SCRIPT > /home/$EC2U/$SCRIPT
+    su -l $EC2U -c /home/$EC2U/$SCRIPT  
+fi
