@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Download ec2-user script and run it as ec2-user
+curl 
