@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+LOGD="$HOME/.start_ipcluster"
+
 function check_zero {
     if ! [[ "$1" =~ ^[0-9]+$ ]]; then
         echo 0
@@ -31,8 +33,15 @@ if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
     exit 1
 fi
 
+# create a log directory
+mkdir -p "$LOGD"
+# link here the logs directory for the ipcluster
+/bin/rm "$LOGD/ipcluster-logs"
+/bin/ln -s "$HOME"/.ipython/profile_default/log "$LOGD/ipcluster-logs"
+
+
 echo "Starting jupyter notebook..."
-jupyter notebook --no-browser >&/dev/null &
+jupyter notebook --no-browser >& "$LOGD"/jupyter-notebook.log &
 sleep 5
 LINK=$(jupyter notebook list | grep http | cut -d ' ' -f 1)
 if [ -z "$LINK" ]; then
