@@ -17,7 +17,9 @@ function get_running {
     echo $( check_zero "$runn" )
 }
 
-
+function clearline {
+    tput cuu 1 && tput el
+}
 
 USAGE="Start ipcluster with N workers (N>=1).
 
@@ -42,16 +44,18 @@ sleep 5
 pending=$(get_pending)
 running=$(get_running)
 
+START=$(date +%s)
 while [ "$pending" -ne 0 ]; do
     # check that pending+running == N, otherwise something is broken...
     if [ $(( $pending + $running )) -ne $1 ]; then
         echo "Unexpected error. Exit!"
         exit 1
     fi
-    # clean the screen
-    echo "Waiting for $pending workers to start (AWS autoscaling)..."
+    WAITTIME=$(( $(date +%s) - $START ))
+    echo "AWS AutoScaling: $running workers running, $pending workers pending [elapsed: $WAITTIME s]"
     sleep 5
+    clearline
     pending=$(get_pending)
     running=$(get_running)
 done
-echo "All workers have been started!"
+echo "All workers have been started [elapsed: $WAITTIME s]!"
