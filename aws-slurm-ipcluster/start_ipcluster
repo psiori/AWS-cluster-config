@@ -64,6 +64,7 @@ pending=$(get_pending)
 running=$(get_running)
 
 START=$(date +%s)
+WAITTIME=0
 while [ "$pending" -ne 0 ]; do
     # check that pending+running == N, otherwise something is broken...
     if [ $(( $pending + $running )) -ne $1 ]; then
