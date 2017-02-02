@@ -31,6 +31,17 @@ if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
     exit 1
 fi
 
+echo "Starting jupyter notebook..."
+jupyter notebook --no-browser >&/dev/null &
+sleep 5
+LINK=$(jupyter notebook list | grep http | cut -d ' ' -f 1)
+if [ -z "$LINK" ]; then
+    echo "Could not start jupyter notebook!"
+    exit 1
+fi
+echo "You can connect to the notebook on your local machine by pointing a browser to:"
+echo "$LINK"
+
 echo "Starting workers..."
 # start the controller and the first worker
 ipcluster start -n 1 --daemonize
