@@ -9,6 +9,9 @@ curl -L https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh > 
 # install miniconda
 bash Miniconda2-latest-Linux-x86_64.sh -b
 
+# clean up
+/bin/rm Miniconda2-latest-Linux-x86_64.sh
+
 # install conda packages
 conda install -y jupyter
 conda install -y ipyparallel
@@ -27,5 +30,6 @@ EOF
 mkdir -p $HOME/scripts
 # download the ipcluster wrapper script
 curl -L https://github.com/psiori/AWS-cluster-config/raw/master/aws-slurm-ipcluster/start_ipcluster > $HOME/scripts/start_ipcluster
+chmod a+x $HOME/scripts/start_ipcluster
 
 
