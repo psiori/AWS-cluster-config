@@ -36,7 +36,7 @@ fi
 # create a log directory
 mkdir -p "$LOGD"
 # link here the logs directory for the ipcluster
-/bin/rm "$LOGD/ipcluster-logs"
+/bin/rm -f "$LOGD/ipcluster-logs"
 /bin/ln -s "$HOME"/.ipython/profile_default/log "$LOGD/ipcluster-logs"
 
 
