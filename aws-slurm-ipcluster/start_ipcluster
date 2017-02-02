@@ -40,7 +40,7 @@ mkdir -p "$LOGD"
 /bin/ln -s "$HOME"/.ipython/profile_default/log "$LOGD/ipcluster-logs"
 
 echo "Starting jupyter notebook..."
-nohup jupyter notebook --no-browser >& "$LOGD"/jupyter-notebook.log
+nohup jupyter notebook --no-browser >& "$LOGD"/jupyter-notebook.log &
 sleep 5
 LINK=$(jupyter notebook list | grep http | cut -d ' ' -f 1)
 if [ -z "$LINK" ]; then
