@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # remove the old nvidia driver (this is not a system package install)
-#nvidia-uninstall -s
+nvidia-uninstall -s
 
 # install libcuda-8.0-1, which will automatically pull the corresponding nvidia-driver package
 # from the ubuntu repositories (as of now this is nvidia-375)
-#apt-get install --no-install-recommends libcuda-8.0-1
+apt-get install --yes --no-install-recommends libcuda-8.0-1
 
-echo "I was here" > /tmp/iwashere.txt
