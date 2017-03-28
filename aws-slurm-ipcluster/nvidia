@@ -6,3 +6,6 @@ nvidia-uninstall -s
 # from the ubuntu repositories (as of now this is nvidia-375)
 apt-get install --yes --no-install-recommends libcuda-8.0-1
 
+# now reload the nvidia driver
+# (ignore errors, in case the machine does not have a GPU at all)
+nvidia-smi || true
