@@ -9,3 +9,6 @@ apt-get install --yes --no-install-recommends libcuda-8.0-1
 # now reload the nvidia driver
 # (ignore errors, in case the machine does not have a GPU at all)
 nvidia-smi || true
+
+# put a placeholder for us to check when this script has finished executing
+touch /tmp/.nvidia_placeholder
